@@ -44,16 +44,14 @@ def draw_board(lvl):
                 pygame.draw.line(screen, 'white', (j * posx, i * posy + (0.5 * posy)),
                                                  (j * posx + posx, i * posy + (0.5 * posy)), 3)
 
-run = True
-while run:
+while True:
     timer.tick(60)
     screen.fill('black')
     draw_board(level)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            pygame.quit()
+            exit()
 
     pygame.display.flip()
-
-pygame.quit()
