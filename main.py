@@ -1,22 +1,29 @@
 # eu amo cecilia
-
 import pygame as pg
 from board import boards
 import math
 
+# VARIÁVEIS GERAIS
 largura = 900
 altura = 950
 PI = math.pi
 color = 'blue'
 px = 30
-animation = 0
+counter = 0
+player_x = 450
+player_y = 665
+direction = 0
+
+# PLAYER SPRITES
+player_images = []
+for i in range (1,8):
+    player_images.append(pg.transform.scale(pg.image.load(f'sprites/pacman/PacMan{i}.png'), (30,30)))
 
 pg.init()
 screen = pg.display.set_mode((largura,altura))
 timer = pg.time.Clock()
 font = pg.font.Font('freesansbold.ttf', 20)
 level = boards
-sprite = pg.image.load("PacMan_sprites.png")
 
 def draw_board(lvl):
     posx = largura // 30 # num2
@@ -48,32 +55,33 @@ def draw_board(lvl):
                 pg.draw.line(screen, 'white', (j * posx, i * posy + (0.5 * posy)),
                                                  (j * posx + posx, i * posy + (0.5 * posy)), 3)
 
-def draw_player(direction, move):
-    if direction == 0:      #direita
-        screen.blit(sprite, (55,55),(911 + (30 * move), (0), px, px))
-    if direction == 1:      #esquerda  
-        screen.blit(sprite, (55,55),(911 + (30 * move), (31), px, px))
-    if direction == 2:      #cima
-        screen.blit(sprite, (55,55),(911 + (30 * move), (62), px, px))
-    if direction == 3:      #baixo
-        screen.blit(sprite, (55,55),(911 + (30 * move), (93), px, px))
+def draw_player():
+    if direction == 0:          #LEFT
+        screen.blit(player_images[counter//10], (player_x, player_y))
+    if direction == 1:          #RIGHT
+        screen.blit(player_images[2+counter//10], (player_x, player_y))
+    if direction == 2:          #UP
+        screen.blit(player_images[4+counter//10], (player_x, player_y))
+    if direction == 3:          #DOWN
+        screen.blit(player_images[6+counter//10], (player_x, player_y))
 
 while True:
     timer.tick(60)
-    
-    #animation += 1
-    #if animation > 20:
-    #    animation = 0
-        
+
+    if counter < 19:
+        counter += 1
+    else:
+        counter = 0
 
     draw_board(level)
-    print()
-    draw_player(0, animation//10)
+    draw_player()
 
     
     for event in pg.event.get():
         if event.type == pg.QUIT:
             pg.quit()
             exit()
+        #if event.type == pg.KEYDOWN:
+
 
     pg.display.flip()
